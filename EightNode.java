@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 /* EightPuzzle uses EightNode objects as states. */
-public class EightNode implements Comparator<EightNode> {
+public class EightNode implements Comparable<EightNode> {
     /* Global variables. */
 
     /* State as an ArrayList<Integer>. */
@@ -31,11 +31,11 @@ public class EightNode implements Comparator<EightNode> {
         setState(state);
     }
 
-    /* Override Comparator method. */
-    public int compare(EightNode one, EightNode two) {
+    /* Override Comparable method. */
+    public int compareTo(EightNode other) {
         /* Get f(n) values for each node. */
-        int f_one = one.getF();
-        int f_two = two.getF();
+        int f_one = getF();
+        int f_two = other.getF();
 
         if (f_one < f_two)
             return -1;

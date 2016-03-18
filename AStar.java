@@ -3,6 +3,8 @@ import java.io.*;
 
 public class AStar {
     /* Global variables. */
+    /* Debug statement flag. */
+    private static final boolean debug = true;
     /* Puzzle. */
     private static EightPuzzle ep = new EightPuzzle();
     /* Nodes. */
@@ -20,24 +22,40 @@ public class AStar {
     /* Main method. */
     public static void main(String[] args) {
         open.add(start);
-        System.out.println(open);
-        search();
+        
+        System.out.println("START: ");
+        open.peek().printState();
+        System.out.println("\n");
 
-        for (int i = 0; i < open.size(); i++) {
-            EightNode node = open.poll();
-            System.out.println("STATE " + i + ": \n");
+        search();
+        
+        for (int i = 0; i < closed.size(); i++) {
+            if (i == 0)
+                System.out.println("SHORTEST PATH: ");
+            
+            EightNode node = closed.get(i);
             node.printState();
         }
     }
 
     /* Search method. */
     public static void search() {
+        /* Print starting... */
+        System.out.println("A* search has begun.\n");
+
         /* Perform search while there are more nodes to be processed. */
         while (open.size() > 0) {
             /* Get the best node (parent) from open list (least f(n)). */
             EightNode parent = getBestNode();
             /* Get states. */
             ArrayList<Integer> parentState = parent.getState();
+
+            /* Print parent state. */
+            if (debug) {
+                System.out.println("PARENT: ");
+                parent.printState();
+                System.out.println("");
+            }
             
             /* Check if parent is the goal. */
             if (parentState.equals(goalState)) {
@@ -50,6 +68,17 @@ public class AStar {
             
             /* Expand parent to all adjacent nodes. */
             ArrayList<EightNode> moves = ep.getMoves(parent);
+
+
+            /* Print parent's children. */
+            if (debug) {
+                System.out.println("moves.size() == " + moves.size());
+                for (int i = 0; i < moves.size(); i++) {
+                    if (i == 0)
+                        System.out.println("CHILDREN: ");
+                    moves.get(i).printState();
+                }
+            }
            
             /* Loop through the adjacent nodes. */
             for (int i = 0; i < moves.size(); i++) {
@@ -95,6 +124,6 @@ public class AStar {
     /* Get best node by evaluating each node's f(n). */
     public static EightNode getBestNode() {
         /* Return 0th element in the PriorityQueue. */
-        return open.peek(); 
+        return open.poll(); 
     }
 }

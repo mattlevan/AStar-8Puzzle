@@ -21,7 +21,7 @@ public class EightPuzzle {
         start = new EightNode(0, numTiles, startState);
         
         /* Construct goal node. */
-        goal = new EightNode(0, 0, genGoal());
+        goal = new EightNode(0, 0, goalState);
     }
 
     /* Getters. */
@@ -38,7 +38,7 @@ public class EightPuzzle {
         ArrayList<Integer> start = new ArrayList<Integer>();
 
         /* Populate ArrayList with integers 0-8, 0 is blank tile. */
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 9; i++) {
             start.add(i);
         }
 
@@ -71,13 +71,13 @@ public class EightPuzzle {
         return goalList;
     }
 
-    /* Returns the legal moves from the given input state. */
+    /* Returns the legal moves from the given input node. */
     public ArrayList<EightNode> getMoves(EightNode parent) {
         /* Declare a list of possible moves. */
         ArrayList<EightNode> children = new
             ArrayList<EightNode>();
 
-        /* Gather attriutes. */
+        /* Gather attributes. */
         ArrayList<Integer> parentState = parent.getState();
         ArrayList<Integer> childState = parentState;
         int parent_g = parent.getG(); // Distance from start.
