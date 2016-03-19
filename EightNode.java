@@ -2,9 +2,11 @@ import java.util.*;
 import java.io.*;
 
 /* EightPuzzle uses EightNode objects as states. */
-public class EightNode implements Comparable<EightNode> {
+public class EightNode implements Comparable<EightNode>, Comparator<EightNode> {
     /* Global variables. */
 
+    /* Parent node. */
+    private EightNode parent;
     /* State as an ArrayList<Integer>. */
     private ArrayList<Integer> state;
 
@@ -18,6 +20,20 @@ public class EightNode implements Comparable<EightNode> {
     private int h; 
 
     /* Constructors. */
+    public EightNode(EightNode node) {
+        ArrayList<Integer> state = node.getState();
+        EightNode parent = node.getParent();
+        int f = node.getF();
+        int g = node.getG();
+        int h = node.getH();
+
+        setState(state);
+        setParent(parent);
+        setF(f);
+        setG(g);
+        setH(h);
+    }
+        
     public EightNode(int g, int h) {
         setF(g+h);
         setG(g);
@@ -31,20 +47,52 @@ public class EightNode implements Comparable<EightNode> {
         setState(state);
     }
 
+    @Override
+    /* Override Comparator method. */
+    public int compare(EightNode one, EightNode two) {
+        /* Get f(n) values for each node. */
+        int f_one = one.getF();
+        int f_two = two.getF();
+
+        return f_two - f_one;
+    }
+
+    @Override
     /* Override Comparable method. */
     public int compareTo(EightNode other) {
         /* Get f(n) values for each node. */
-        int f_one = getF();
+        int f_one = this.getF();
         int f_two = other.getF();
 
-        if (f_one < f_two)
-            return -1;
-        else if (f_one > f_two)
-            return 1;
-        else if (f_one == f_two)
-            return 0;
-        else
-            return 9;
+        return f_two - f_one;
+    }
+
+    @Override
+    /* Override equals method. */
+    public boolean equals(Object obj) {
+        if (obj == this)
+            return true;
+        if (obj == null || obj.getClass() != this.getClass())
+            return false;
+
+        EightNode node = new EightNode((EightNode)obj);
+
+        return node.getState().equals(this.getState());
+    }
+
+    @Override
+    /* Override hashCode method. */
+    public int hashCode() {
+        int code = 1;
+        ArrayList<Integer> state = this.getState();
+
+        for (int i = 0; i < state.size(); i++) {
+            code *= state.get(i);
+            code *= i;
+            code /= (i+1);
+        }
+
+        return code;
     }
 
     /* Print state method. */
@@ -52,9 +100,21 @@ public class EightNode implements Comparable<EightNode> {
         for (int i = 0; i < state.size(); i++) {
             System.out.print(state.get(i));
 
-            if ((i+1)%3 == 0)
+            if ((i+1) == 3) {
+                System.out.print("\tf: " + getF());
                 System.out.println("");
+            }
+            else if ((i+1) == 6) {
+                System.out.print("\tg: " + getG());
+                System.out.println("");
+            }
+            else if ((i+1) == 9) {
+                System.out.print("\th: " + getH());
+                System.out.println("");
+            }
         }
+
+        System.out.println("");
     }
 
     /* Getters. */
@@ -80,6 +140,10 @@ public class EightNode implements Comparable<EightNode> {
         return h;
     }
 
+    public EightNode getParent() {
+        return parent;
+    }
+
     /* Setters. */
     public void setF(int f) {
         this.f = f;
@@ -94,6 +158,10 @@ public class EightNode implements Comparable<EightNode> {
     }
     
     public void setState(ArrayList<Integer> state) {
-        this.state = state;
+        this.state = new ArrayList<Integer>(state);
+    }
+
+    public void setParent(EightNode parent) {
+        this.parent = parent;
     }
 }

@@ -61,12 +61,12 @@ public class EightPuzzle {
         goalList.add(0,1);
         goalList.add(1,2);
         goalList.add(2,3);
-        goalList.add(3,8);
-        goalList.add(4,0);
-        goalList.add(5,4);
+        goalList.add(3,4);
+        goalList.add(4,5);
+        goalList.add(5,6);
         goalList.add(6,7);
-        goalList.add(7,6);
-        goalList.add(8,5);
+        goalList.add(7,8);
+        goalList.add(8,0);
 
         return goalList;
     }
@@ -79,7 +79,6 @@ public class EightPuzzle {
 
         /* Gather attributes. */
         ArrayList<Integer> parentState = parent.getState();
-        ArrayList<Integer> childState = parentState;
         int parent_g = parent.getG(); // Distance from start.
 
         /* Apply the rules of the game and return a legal moves index. */
@@ -87,10 +86,15 @@ public class EightPuzzle {
 
         /* Generate the moves and add them to children. */
         for (int i = 0; i < movesIndex.size(); i++) {
+            /* Get index of blank tile, or zero tile. */
+            int zeroIndex = parentState.indexOf(0);
+        
+            /* Re-initialize childState. */
+            ArrayList<Integer> childState = new ArrayList<Integer>(parentState);
+
             /* Gather the child's values. */ 
-            int zeroIndex = childState.indexOf(0);
-            int tile = childState.get(movesIndex.get(i));
-            int tileIndex = childState.indexOf(tile);
+            int tileIndex = movesIndex.get(i);
+            int tile = childState.get(tileIndex);
             
             /* Generate possible moves by swapping tiles. */
             childState.set(zeroIndex, tile);
@@ -141,7 +145,7 @@ public class EightPuzzle {
         ArrayList<Integer> goalState = goal.getState();
         
         /* Calculate numTiles out of place. */
-        for (int i = 0; i < nodeState.size(); i++) {
+        for (int i = 1; i < nodeState.size(); i++) {
             if (nodeState.get(i) != goalState.get(i))
                 numTiles++; 
         }
@@ -156,7 +160,7 @@ public class EightPuzzle {
 
 
         /* Calculate numTiles out of place. */
-        for (int i = 0; i < nodeState.size(); i++) {
+        for (int i = 1; i < nodeState.size(); i++) {
             if (nodeState.indexOf(i) != goalState.indexOf(i))
                 numTiles++; 
         }
