@@ -35,30 +35,22 @@ public class EightPuzzle {
 
     /* Generates a random start state. */
     public ArrayList<Integer> genStart() {
-        ArrayList<Integer> tempStartState = new ArrayList<Integer>();
+        ArrayList<Integer> start = new ArrayList<Integer>();
 
-        /* Populate ArrayList with the goal state. */
-		tempStartState.addAll(goalState);
-		int tempStartH = tilesOutOfPlace(tempStartState);		
-		EightNode tempStart = new EightNode(0, tempStartH, tempStartState);
-        /* Generate random start state by making a random number of */
-        /* moves, and randomly selected from child moves each time. */ 
-		Random rand = new Random();
-		int randMoves = rand.nextInt(36); // Number of moves to make.
-		for(int i=0; i<randMoves; i++){
-			Random rand2 = new Random(); // Which move to select.
-			ArrayList<EightNode> moves = new ArrayList<EightNode>();
-			moves = getMoves(tempStart);
-			int moveSelect = rand2.nextInt(moves.size());
-			tempStart = moves.get(moveSelect);	
-		}		
+        /* Populate ArrayList with integers 0-8, 0 is blank tile. */
+        for (int i = 0; i < 9; i++) {
+            start.add(i);
+        }
+
+        /* Shuffle it! */
+        Collections.shuffle(start);
 
         /* Ensure the start state isn't the goal state. */
-        if (tempStart.equals(goal)) {
+        if (start.equals(goal)) {
             genStart();
         }
-		
-        return tempStart.getState();
+            
+        return start;
     }
 
     /* Generates the goal state. */
