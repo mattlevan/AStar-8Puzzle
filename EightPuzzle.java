@@ -12,8 +12,8 @@ public class EightPuzzle {
     /* Default constructor. */
     public EightPuzzle() {
         /* Calculate values for constructing the start node. */
-        startState = genStart();
         goalState = genGoal();
+        startState = genStart();
         int numTiles = tilesOutOfPlace(startState);
         // int manDist = manhattanDist(startState); 
 
