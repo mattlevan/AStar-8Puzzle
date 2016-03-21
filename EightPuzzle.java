@@ -12,13 +12,13 @@ public class EightPuzzle {
     /* Default constructor. */
     public EightPuzzle() {
         /* Calculate values for constructing the start node. */
-        startState = genStart();
         goalState = genGoal();
-        int numTiles = tilesOutOfPlace(startState);
-        // int manDist = manhattanDist(startState); 
+        startState = genStart();
+        //int numTiles = tilesOutOfPlace(startState);
+        int manDist = manhattanDist(startState); 
 
         /* Construct start node. */ 
-        start = new EightNode(0, numTiles, startState);
+        start = new EightNode(0, manDist, startState);
         
         /* Construct goal node. */
         goal = new EightNode(0, 0, goalState);
@@ -35,22 +35,30 @@ public class EightPuzzle {
 
     /* Generates a random start state. */
     public ArrayList<Integer> genStart() {
-        ArrayList<Integer> start = new ArrayList<Integer>();
+        ArrayList<Integer> tempStartState = new ArrayList<Integer>();
 
-        /* Populate ArrayList with integers 0-8, 0 is blank tile. */
-        for (int i = 0; i < 9; i++) {
-            start.add(i);
-        }
-
-        /* Shuffle it! */
-        Collections.shuffle(start);
+        /* Populate ArrayList with the goal state. */
+		tempStartState.addAll(goalState);
+		int tempStartH = tilesOutOfPlace(tempStartState);		
+		EightNode tempStart = new EightNode(0, tempStartH, tempStartState);
+        /* Generate random start state by making a random number of */
+        /* moves, and randomly selected from child moves each time. */ 
+		Random rand = new Random();
+		int randMoves = rand.nextInt(36); // Number of moves to make.
+		for(int i=0; i<randMoves; i++){
+			Random rand2 = new Random(); // Which move to select.
+			ArrayList<EightNode> moves = new ArrayList<EightNode>();
+			moves = getMoves(tempStart);
+			int moveSelect = rand2.nextInt(moves.size());
+			tempStart = moves.get(moveSelect);	
+		}		
 
         /* Ensure the start state isn't the goal state. */
-        if (start.equals(goal)) {
+        if (tempStart.equals(goal)) {
             genStart();
         }
-            
-        return start;
+		
+        return tempStart.getState();
     }
 
     /* Generates the goal state. */
@@ -175,4 +183,25 @@ public class EightPuzzle {
 
         return numTiles;
     }
+
+	/* Calculates sum of distances of each tile from goal position. */
+	public int manhattanDist(ArrayList<Integer> nodeState){
+		int totalDist = 0; // Sum of the individual distances.
+		int currentTile;
+		int goalTileIndex; // The index of the 
+		int rowDist;
+		int colDist;
+		/* Loop through each nodeState element, and calc M. Dist. */
+		for(int i=0; i<nodeState.size(); i++){
+			currentTile = nodeState.get(i);  
+			goalTileIndex = goalState.indexOf(currentTile);
+			/* Calculate the col. distance (mod distance) from goal. */
+			colDist = Math.abs((i%3) - (goalTileIndex%3));	
+			/* Calculate the row distance (div. distance) from goal. */
+			rowDist = Math.abs((i/3) - (goalTileIndex/3));
+			totalDist += colDist + rowDist;
+			System.out.println("currentTile Index: "+i+" goalIndex: " + goalTileIndex + " Col: " + colDist +" Row: " + rowDist + " MDist: " + (colDist + rowDist)); 
+		}
+		return totalDist;
+	}
 }
