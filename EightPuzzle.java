@@ -78,11 +78,17 @@ public class EightPuzzle {
             ArrayList<EightNode>();
 
         /* Gather attributes. */
-        ArrayList<Integer> parentState = parent.getState();
+        ArrayList<Integer> parentState = 
+            new ArrayList<Integer>(parent.getState().size()); 
+        parentState.addAll(parent.getState());
+        System.out.println(parentState);
         int parent_g = parent.getG(); // Distance from start.
 
         /* Apply the rules of the game and return a legal moves index. */
-        ArrayList<Integer> movesIndex = findMoves(parent.getState());
+        ArrayList<Integer> movesIndex = 
+            new ArrayList<Integer>(4); 
+        movesIndex.addAll(findMoves(parentState));
+        System.out.println(movesIndex);
 
         /* Generate the moves and add them to children. */
         for (int i = 0; i < movesIndex.size(); i++) {
@@ -90,7 +96,9 @@ public class EightPuzzle {
             int zeroIndex = parentState.indexOf(0);
         
             /* Re-initialize childState. */
-            ArrayList<Integer> childState = new ArrayList<Integer>(parentState);
+            ArrayList<Integer> childState = 
+                new ArrayList<Integer>(parentState.size());
+            childState.addAll(parentState);
 
             /* Gather the child's values. */ 
             int tileIndex = movesIndex.get(i);

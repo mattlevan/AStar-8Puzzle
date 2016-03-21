@@ -41,7 +41,9 @@ public class AStar {
             /* Remove the best node (parent) from open list (least f(n)). */
             EightNode parent = getBestNode();
             /* Get state. */
-            ArrayList<Integer> parentState = parent.getState();
+            ArrayList<Integer> parentState = 
+                new ArrayList<Integer>();
+            parentState.addAll(parent.getState());
             
             /* Check if parent is the goal. */
             if (parentState.equals(goalState)) {
@@ -53,48 +55,40 @@ public class AStar {
             closed.add(parent);
             
             /* Expand parent to all adjacent nodes. */
-            ArrayList<EightNode> moves = ep.getMoves(parent);
+            ArrayList<EightNode> moves = ep.getMoves(parent); 
 
             /* Loop through the adjacent nodes (moves). */
             for (int i = 0; i < moves.size(); i++) {
                 /* Assign adjNode. */
-                EightNode adjNode = new EightNode(moves.get(i));
+                EightNode adjNode = moves.get(i);
                 /* Assign adjNodeState. */
-                ArrayList<Integer> adjNodeState = adjNode.getState();
+                ArrayList<Integer> adjNodeState = 
+                    new ArrayList<Integer>();
+                adjNodeState.addAll(adjNode.getState());
 
                 /* If adjacent node is already in closed set... */
                 if (closed.contains(adjNode)) {
                     /* Discard move. */ 
                     moves.remove(adjNode);
-
                     /* Continue next iteration of for loop. */
                     continue;
                 }
                 /* Else, if adjacent node is already in open set... */
                 else if (open.contains(adjNode)) {
                     /* Assign openNode. */
-                    Iterator<EightNode> openItr = open.iterator();
-                    EightNode openNode = null;
-                    while (openItr.hasNext()) {
-                        EightNode tempNode = new EightNode(openItr.next());
-                        if (tempNode.equals(adjNode))
-                            openNode = new EightNode(tempNode);
-                    }
+                    EightNode openNode = new EightNode(adjNode);
 
-                    /* Get f(n) for adjNode and open nodes. */
-                    int adjNode_f = adjNode.getF();
-                    int openNode_f = openNode.getF();
+                    /* Get g(n) for adjNode and open nodes. */
+                    int adjNode_g = adjNode.getG();
+                    int openNode_g = openNode.getG();
 
-                    /* If adjNode g(n) < open g(n)... */
-                    if (adjNode_f < openNode_f) {
+                    /* If adjNode g(n) < openNode g(n)... */
+                    if (openNode_g < adjNode_g) {
                         /* Discard openNode move from open list. */
-                        open.remove(openNode);
+                        open.remove(adjNode);
                         
-                        /* Link adjNode to the parent. */
-                        adjNode.setParent(parent);
-    
                         /* Add adjNode to open list. */
-                        open.add(adjNode);
+                        open.add(openNode);
                         continue;
                     }
                 }
@@ -117,18 +111,9 @@ public class AStar {
 
     /* Print the shortest path. */
     public static void printPath() {
-        ArrayList<EightNode> path = new ArrayList<EightNode>();
-        EightNode node = new EightNode(closed.get(closed.size()-1));
-
-        while (node != null) {
-            path.add(node);
-            node = node.getParent();
-        }
-
-        System.out.println("PATH (" + path.size() + "):");
-
-        for (int i = path.size()-1; i >= 0; i--) {
-            path.get(i).printState();
+        System.out.println("PATH (" + closed.size() + "): ");
+        for (int i = 0; i < closed.size(); i++) {
+            closed.get(i).printState();
         }
     }
 }

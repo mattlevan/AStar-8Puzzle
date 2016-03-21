@@ -21,17 +21,10 @@ public class EightNode implements Comparable<EightNode>, Comparator<EightNode> {
 
     /* Constructors. */
     public EightNode(EightNode node) {
-        ArrayList<Integer> state = node.getState();
-        EightNode parent = node.getParent();
-        int f = node.getF();
-        int g = node.getG();
-        int h = node.getH();
+        state = new ArrayList<Integer>();
+        state.addAll(node.getState());
 
-        setState(state);
-        setParent(parent);
-        setF(f);
-        setG(g);
-        setH(h);
+        parent = new EightNode(node.getG(), node.getH(), state);
     }
         
     public EightNode(int g, int h) {
@@ -54,17 +47,19 @@ public class EightNode implements Comparable<EightNode>, Comparator<EightNode> {
         int f_one = one.getF();
         int f_two = two.getF();
 
-        return f_two - f_one;
+        // return f_two - f_one;
+        return f_one - f_two;
     }
 
     @Override
     /* Override Comparable method. */
     public int compareTo(EightNode other) {
         /* Get f(n) values for each node. */
-        int f_one = this.getF();
-        int f_two = other.getF();
+        int f_self = this.getF();
+        int f_other = other.getF();
 
-        return f_two - f_one;
+        // return f_other - f_self;
+        return f_self - f_other;
     }
 
     @Override
@@ -75,25 +70,25 @@ public class EightNode implements Comparable<EightNode>, Comparator<EightNode> {
         if (obj == null || obj.getClass() != this.getClass())
             return false;
 
-        EightNode node = new EightNode((EightNode)obj);
+        EightNode node = new EightNode((EightNode) obj);
 
         return node.getState().equals(this.getState());
     }
 
-    @Override
-    /* Override hashCode method. */
+    // @Override
+    /* Override hashCode method. 
     public int hashCode() {
         int code = 1;
         ArrayList<Integer> state = this.getState();
 
         for (int i = 0; i < state.size(); i++) {
             code *= state.get(i);
-            code *= i;
-            code /= (i+1);
+            code *= getF();
         }
 
         return code;
     }
+    */
 
     /* Print state method. */
     public void printState() {
