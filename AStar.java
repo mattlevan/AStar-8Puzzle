@@ -3,8 +3,6 @@ import java.io.*;
 
 public class AStar {
     /* Global variables. */
-    /* Debug statement flag. */
-    private static final boolean debug = false;
     /* Puzzle. */
     private static EightPuzzle ep = new EightPuzzle();
     /* Nodes. */
@@ -26,16 +24,14 @@ public class AStar {
         System.out.println("START: ");
         start.printState();
 
-        System.out.println("GOAL: ");
-        goal.printState();
-
-        search();
-        
-        printPath();
+        if (search())
+            printPath();
+        else
+            System.out.println("Goal not found!");
     }
 
     /* Search method. */
-    public static void search() {
+    public static boolean search() {
         /* Perform search while there are more nodes to be processed. */
         while (open.size() > 0) {
             /* Remove the best node (parent) from open list (least f(n)). */
@@ -49,8 +45,8 @@ public class AStar {
             if (parentState.equals(goalState)) {
                 /* Add it to closed so it prints in path. */
                 closed.add(parent);
-                /* Done. */
-                break;
+                /* Eureka! */
+                return true;
             }
             
             /* Add parent to closed list. */
@@ -86,10 +82,10 @@ public class AStar {
 
                     /* If adjNode g(n) < openNode g(n)... */
                     if (openNode_g < adjNode_g) {
-                        /* Discard openNode move from open list. */
+                        /* Discard adjNode move from open list. */
                         open.remove(adjNode);
                         
-                        /* Add adjNode to open list. */
+                        /* Add openNode to open list. */
                         open.add(openNode);
                         continue;
                     }
@@ -103,6 +99,9 @@ public class AStar {
                 }
             }
         }
+
+        /* Goal not found! */
+        return false;
     }
 
     /* Get best node by evaluating each node's f(n). */
@@ -113,9 +112,34 @@ public class AStar {
 
     /* Print the shortest path. */
     public static void printPath() {
-        System.out.println("PATH (" + closed.size() + "): ");
+        /* Print some stuff. */
+        System.out.println("PATH: ");
+
+        /* Declare an optimal path list. */
+        ArrayList<EightNode> path = new ArrayList<EightNode>();
+
+        /* Find the goal node in closed list. */
+        int goalIndex = 0;
         for (int i = 0; i < closed.size(); i++) {
-            closed.get(i).printState();
+            if (closed.get(i).getState().equals(goalState)) {
+                goalIndex = i;
+            }
+        }
+
+        /* Set the tempNode to the goal. */
+        EightNode tempNode = closed.get(goalIndex);
+
+        /* Add shortest path by iterating thru parents. */
+        while (tempNode.parent != null) {
+            path.add(tempNode);
+            tempNode = tempNode.parent;
+        }
+
+        /* Print it. */
+        for (int i = path.size()-1; i > -1; i--) {
+            if (i == 0)
+                System.out.println("GOAL:");
+            path.get(i).printState();
         }
     }
 }

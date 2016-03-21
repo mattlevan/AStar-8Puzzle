@@ -6,7 +6,7 @@ public class EightNode implements Comparable<EightNode>, Comparator<EightNode> {
     /* Global variables. */
 
     /* Parent node. */
-    private EightNode parent;
+    public EightNode parent;
     /* State as an ArrayList<Integer>. */
     private ArrayList<Integer> state;
 

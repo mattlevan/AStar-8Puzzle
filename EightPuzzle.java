@@ -45,7 +45,7 @@ public class EightPuzzle {
         /* Generate random start state by making a random number of */
         /* moves, and randomly selected from child moves each time. */ 
 		Random rand = new Random();
-		int randMoves = rand.nextInt(36); // Number of moves to make.
+		int randMoves = rand.nextInt(36)+5; // Number of moves to make.
 		for(int i=0; i<randMoves; i++){
 		    Random rand2 = new Random(); // Which move to select.
 			ArrayList<EightNode> moves = new ArrayList<EightNode>();
@@ -90,14 +90,12 @@ public class EightPuzzle {
         ArrayList<Integer> parentState = 
             new ArrayList<Integer>(parent.getState().size()); 
         parentState.addAll(parent.getState());
-        System.out.println(parentState);
         int parent_g = parent.getG(); // Distance from start.
 
         /* Apply the rules of the game and return a legal moves index. */
         ArrayList<Integer> movesIndex = 
             new ArrayList<Integer>(4); 
         movesIndex.addAll(findMoves(parentState));
-        System.out.println(movesIndex);
 
         /* Generate the moves and add them to children. */
         for (int i = 0; i < movesIndex.size(); i++) {
@@ -201,7 +199,9 @@ public class EightPuzzle {
 			/* Calculate the row distance (div. distance) from goal. */
 			rowDist = Math.abs((i/3) - (goalTileIndex/3));
 			totalDist += colDist + rowDist;
-			System.out.println("currentTile Index: "+i+" goalIndex: " + goalTileIndex + " Col: " + colDist +" Row: " + rowDist + " MDist: " + (colDist + rowDist)); 
+			// System.out.println("currentTile Index: "+i+" goalIndex: " 
+            // + goalTileIndex + " Col: " + colDist +" Row: " + rowDist + 
+            // " MDist: " + (colDist + rowDist)); 
 		}
 		return totalDist;
 	}
