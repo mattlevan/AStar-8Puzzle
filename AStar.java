@@ -47,6 +47,8 @@ public class AStar {
             
             /* Check if parent is the goal. */
             if (parentState.equals(goalState)) {
+                /* Add it to closed so it prints in path. */
+                closed.add(parent);
                 /* Done. */
                 break;
             }

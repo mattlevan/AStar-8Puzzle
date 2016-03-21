@@ -41,12 +41,13 @@ public class EightPuzzle {
 		tempStartState.addAll(goalState);
 		int tempStartH = tilesOutOfPlace(tempStartState);		
 		EightNode tempStart = new EightNode(0, tempStartH, tempStartState);
+
         /* Generate random start state by making a random number of */
         /* moves, and randomly selected from child moves each time. */ 
 		Random rand = new Random();
 		int randMoves = rand.nextInt(36); // Number of moves to make.
 		for(int i=0; i<randMoves; i++){
-			Random rand2 = new Random(); // Which move to select.
+		    Random rand2 = new Random(); // Which move to select.
 			ArrayList<EightNode> moves = new ArrayList<EightNode>();
 			moves = getMoves(tempStart);
 			int moveSelect = rand2.nextInt(moves.size());
