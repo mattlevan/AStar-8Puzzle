@@ -14,11 +14,11 @@ public class EightPuzzle {
         /* Calculate values for constructing the start node. */
         goalState = genGoal();
         startState = genStart();
-        int numTiles = tilesOutOfPlace(startState);
-        // int manDist = manhattanDist(startState); 
+        //int numTiles = tilesOutOfPlace(startState);
+        int manDist = manhattanDist(startState); 
 
         /* Construct start node. */ 
-        start = new EightNode(0, numTiles, startState);
+        start = new EightNode(0, manDist, startState);
         
         /* Construct goal node. */
         goal = new EightNode(0, 0, goalState);
@@ -175,4 +175,25 @@ public class EightPuzzle {
 
         return numTiles;
     }
+
+	/* Calculates sum of distances of each tile from goal position. */
+	public int manhattanDist(ArrayList<Integer> nodeState){
+		int totalDist = 0; // Sum of the individual distances.
+		int currentTile;
+		int goalTileIndex; // The index of the 
+		int rowDist;
+		int colDist;
+		/* Loop through each nodeState element, and calc M. Dist. */
+		for(int i=0; i<nodeState.size(); i++){
+			currentTile = nodeState.get(i);  
+			goalTileIndex = goalState.indexOf(currentTile);
+			/* Calculate the col. distance (mod distance) from goal. */
+			colDist = Math.abs((i%3) - (goalTileIndex%3));	
+			/* Calculate the row distance (div. distance) from goal. */
+			rowDist = Math.abs((i/3) - (goalTileIndex/3));
+			totalDist += colDist + rowDist;
+			System.out.println("currentTile Index: "+i+" goalIndex: " + goalTileIndex + " Col: " + colDist +" Row: " + rowDist + " MDist: " + (colDist + rowDist)); 
+		}
+		return totalDist;
+	}
 }
