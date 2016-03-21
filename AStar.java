@@ -66,8 +66,6 @@ public class AStar {
 
                 /* If adjacent node is already in closed set... */
                 if (closed.contains(adjNode)) {
-                    /* Discard move. */ 
-                    moves.remove(adjNode);
                     /* Continue next iteration of for loop. */
                     continue;
                 }
